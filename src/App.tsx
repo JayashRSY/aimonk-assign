@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import TagView from "./components/TagView";
 
 interface Tag {
@@ -24,6 +24,7 @@ const initialTree: Tag = {
 const App: React.FC = () => {
   const [tree, setTree] = useState<Tag>(initialTree);
   const [exportedJson, setExportedJson] = useState<string>("");
+  const jsonRef = useRef<HTMLPreElement | null>(null);
 
   const updateTree = () => {
     setTree({ ...tree });
@@ -43,14 +44,20 @@ const App: React.FC = () => {
   const exportTree = () => {
     const exportedTree = cleanTree(tree);
     const jsonString = JSON.stringify(exportedTree, null, 2);
-    setExportedJson(jsonString); 
-    
+    setExportedJson(jsonString);
+    // Scroll to the JSON output
+    setTimeout(() => {
+      if (jsonRef.current) {
+        jsonRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 0);
+
     // const blob = new Blob([jsonString], { type: "application/json" });
 
     // const url = URL.createObjectURL(blob);
     // const link = document.createElement("a");
     // link.href = url;
-    // link.download = "tree_structure.json"; 
+    // link.download = "tree_structure.json";
     // document.body.appendChild(link);
     // link.click();
 
@@ -71,7 +78,10 @@ const App: React.FC = () => {
         Export
       </button>
       {exportedJson && (
-        <pre className="mt-4 p-4 bg-gray-100 rounded-md text-sm text-gray-700 overflow-x-auto">
+        <pre
+          ref={jsonRef}
+          className="mt-4 p-4 bg-gray-100 rounded-md text-sm text-gray-700 overflow-x-auto"
+        >
           {exportedJson}
         </pre>
       )}
