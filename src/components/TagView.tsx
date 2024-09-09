@@ -92,12 +92,15 @@ const TagView: React.FC<TagViewProps> = ({ tag, updateTag }) => {
       {!collapsed && (
         <div className="ml-4 mt-2">
           {tag.data !== undefined ? (
-            <input
-              type="text"
-              className="w-full border border-gray-300 p-2 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm"
-              value={tag.data}
-              onChange={handleDataChange}
-            />
+            <div className="flex items-center">
+              <span className="me-4 font-bold">Data</span>
+              <input
+                type="text"
+                className="w-full border border-gray-300 p-2 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm"
+                value={tag.data}
+                onChange={handleDataChange}
+              />
+            </div>
           ) : (
             tag.children &&
             tag.children.map((child, index) => (
