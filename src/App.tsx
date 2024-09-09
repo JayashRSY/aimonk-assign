@@ -39,9 +39,25 @@ const App: React.FC = () => {
     };
   };
 
+  // Function to export the tree as a downloadable JSON file
   const exportTree = () => {
     const exportedTree = cleanTree(tree);
-    alert(JSON.stringify(exportedTree, null, 2));
+    const jsonString = JSON.stringify(exportedTree, null, 2);
+
+    // Create a Blob with JSON content
+    const blob = new Blob([jsonString], { type: "application/json" });
+
+    // Create a link element to initiate download
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "tree_structure.json"; // File name
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup: Remove the link after downloading
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
